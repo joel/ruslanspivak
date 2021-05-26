@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+begin
+  require "pry"
+rescue LoadError
+end
+
 require "ruslanspivak"
 
 RSpec.configure do |config|
@@ -12,4 +17,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+  config.filter_run :focus => true
+  config.run_all_when_everything_filtered = true
 end
