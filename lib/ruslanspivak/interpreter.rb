@@ -10,12 +10,11 @@ module Ruslanspivak
     end
 
     # rubocop:disable Metrics/MethodLength
-    # rubocop:disable Metrics/AbcSize
     def next_token
-      while current_char != Token.new(Token::EOF, nil)
+      while not_ended?
         skip_whitespace if whitespace?
 
-        break if current_char == Token.new(Token::EOF, nil)
+        break if ended?
 
         return Token.new(Token::INTEGER, integer) if digit?
 
@@ -34,9 +33,8 @@ module Ruslanspivak
 
       Token.new(Token::EOF, nil)
     end
-    # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Metrics/AbcSize
 
+    # rubocop:enable Metrics/MethodLength
     def eat(token_type)
       if current_token.type == token_type
         @current_token = next_token
@@ -78,9 +76,17 @@ module Ruslanspivak
 
     private
 
+    def ended?
+      current_char == Token.new(Token::EOF, nil)
+    end
+
+    def not_ended?
+      !ended?
+    end
+
     def integer
       result = ""
-      while current_char != Token.new(Token::EOF, nil) && digit?
+      while not_ended? && digit?
         result += current_char
         advance
       end
@@ -96,7 +102,7 @@ module Ruslanspivak
     end
 
     def skip_whitespace
-      advance while current_char != Token.new(Token::EOF, nil) && whitespace?
+      advance while not_ended? && whitespace?
     end
 
     def advance
