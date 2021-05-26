@@ -1,5 +1,9 @@
+require:
+  - rubocop-performance
+
 AllCops:
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 3.0.0
+  NewCops: enable
 
 Style/StringLiterals:
   Enabled: true
@@ -11,3 +15,9 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Lint/SuppressedException:
+  Enabled: false
