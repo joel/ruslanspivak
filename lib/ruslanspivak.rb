@@ -4,5 +4,5 @@ require_relative "ruslanspivak/version"
 
 module Ruslanspivak
   class Error < StandardError; end
-  # Your code goes here...
+  
 end
