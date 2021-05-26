@@ -6,28 +6,22 @@ module Ruslanspivak
       @text = text
       @position = 0
       @current_token = nil
+      @current_char = text[position]
     end
 
-    def error
-      raise "Parsing error"
-    end
+    def next_token
+      while current_char != Token.new(Token::EOF, nil)
+        return Token.new(Token::INTEGER, integer) if digit?
 
-    def next_token # rubocop:disable Metrics/MethodLength
-      return Token.new(Token::EOF, nil) if position > text.length - 1
+        if current_char == "+"
+          advance
+          return Token.new(Token::PLUS, "+")
+        end
 
-      current_char = text[position]
-
-      if /[0-9]{1}/.match?(current_char)
-        @position += 1
-        return Token.new(Token::INTEGER, Integer(current_char))
+        error
       end
 
-      if current_char == "+"
-        @position += 1
-        return Token.new(Token::PLUS, current_char)
-      end
-
-      error
+      Token.new(Token::EOF, nil)
     end
 
     def eat(token_type)
@@ -67,6 +61,35 @@ module Ruslanspivak
 
     private
 
-    attr_reader :text, :position, :current_token
+    def integer
+      result = ""
+      while current_char != Token.new(Token::EOF, nil) && digit?
+        result += current_char
+        advance
+      end
+      Integer(result)
+    end
+
+    def digit?
+      current_char.match?(/(?<digit>[0-9]{1})/)
+    end
+
+    def advance
+      @position += 1
+
+      @current_char = if position > text.length - 1
+                        Token.new(Token::EOF, nil)
+                      else
+                        text[position]
+                      end
+
+      nil
+    end
+
+    def error
+      raise "Parsing error"
+    end
+
+    attr_reader :text, :position, :current_token, :current_char
   end
 end
