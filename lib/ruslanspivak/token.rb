@@ -4,7 +4,8 @@ module Ruslanspivak
   class Token
     INTEGER = "INTEGER"
     PLUS    = "PLUS"
-    EOF     = "EOF"
+    MINUS = "MINUS"
+    EOF = "EOF"
 
     attr_reader :type, :value
 

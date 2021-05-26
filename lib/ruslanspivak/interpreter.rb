@@ -9,13 +9,18 @@ module Ruslanspivak
       @current_char = text[position]
     end
 
-    def next_token
+    def next_token # rubocop:disable Metrics/MethodLength
       while current_char != Token.new(Token::EOF, nil)
         return Token.new(Token::INTEGER, integer) if digit?
 
         if current_char == "+"
           advance
           return Token.new(Token::PLUS, "+")
+        end
+
+        if current_char == "-"
+          advance
+          return Token.new(Token::PLUS, "-")
         end
 
         error
@@ -32,7 +37,7 @@ module Ruslanspivak
       end
     end
 
-    def eval_expression
+    def eval_expression # rubocop:disable Metrics/MethodLength
       @current_token = next_token
 
       # we expect the current token to be a single-digit integer
@@ -41,7 +46,11 @@ module Ruslanspivak
 
       # we expect the current token to be a '+' token
       op = current_token
-      eat(Token::PLUS)
+      if op.type == Token::PLUS
+        eat(Token::PLUS)
+      else
+        eat(Token::MINUS)
+      end
 
       # we expect the current token to be a single-digit integer
       right = current_token
