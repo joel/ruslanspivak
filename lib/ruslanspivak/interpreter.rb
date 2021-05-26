@@ -26,7 +26,7 @@ module Ruslanspivak
 
         if current_char == "-"
           advance
-          return Token.new(Token::PLUS, "-")
+          return Token.new(Token::MINUS, "-")
         end
 
         error
@@ -50,35 +50,31 @@ module Ruslanspivak
     def eval_expression # rubocop:disable Metrics/MethodLength
       @current_token = next_token
 
-      # we expect the current token to be a single-digit integer
-      left = current_token
-      eat(Token::INTEGER)
+      result = term
 
-      # we expect the current token to be a '+' token
-      op = current_token
-      if op.type == Token::PLUS
-        eat(Token::PLUS)
-      else
-        eat(Token::MINUS)
+      while [Token::PLUS, Token::MINUS].include?(current_token.type)
+        token = current_token
+        case token.type
+        when Token::PLUS
+          eat(Token::PLUS)
+          result += term
+        when Token::MINUS
+          eat(Token::MINUS)
+          result -= term
+        end
       end
 
-      # we expect the current token to be a single-digit integer
-      right = current_token
-      eat(Token::INTEGER)
-      # after the above call the self.current_token is set to
-      # EOF token
-
-      # At this point INTEGER PLUS INTEGER sequence of tokens
-      # has been successfully found and the method can just
-      # return the result of adding two integers, thus
-      # effectively interpreting client input
-
-      eval <<-RUBY, binding, __FILE__, __LINE__ + 1 # rubocop:disable Security/Eval
-        #{left.value} #{op.value} #{right.value} # 3 + 1
-      RUBY
+      result
     end
 
     private
+
+    # """Return an INTEGER token value."""
+    def term
+      token = current_token
+      eat(Token::INTEGER)
+      token.value
+    end
 
     def ended?
       current_char == Token.new(Token::EOF, nil)

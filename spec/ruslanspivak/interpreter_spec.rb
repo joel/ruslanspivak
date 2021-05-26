@@ -51,7 +51,8 @@ module Ruslanspivak
         "12+2" => 14,
         "12+22" => 34,
         " 22 - 2 " => 20,
-        " 342 - 2 " => 340
+        " 342 - 2 " => 340,
+        "10 + 1 + 2 - 3 + 4 + 6 - 15" => 5
       }.each do |expression, result|
         describe "#eval_expression" do
           it do
