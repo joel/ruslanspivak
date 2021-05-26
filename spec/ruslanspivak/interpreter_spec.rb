@@ -45,12 +45,12 @@ module Ruslanspivak
 
     context "with expressions" do
       {
-        "3+1" => 4,
+        "3 + 1" => 4,
         "3+5" => 8,
         "2+2" => 4,
         "12+2" => 14,
         "12+22" => 34,
-        "22-2" => 20
+        " 22 - 2 " => 20
       }.each do |expression, result|
         describe "#eval_expression" do
           it do

@@ -9,8 +9,14 @@ module Ruslanspivak
       @current_char = text[position]
     end
 
-    def next_token # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
+    def next_token
       while current_char != Token.new(Token::EOF, nil)
+        skip_whitespace if whitespace?
+
+        break if current_char == Token.new(Token::EOF, nil)
+
         return Token.new(Token::INTEGER, integer) if digit?
 
         if current_char == "+"
@@ -28,6 +34,8 @@ module Ruslanspivak
 
       Token.new(Token::EOF, nil)
     end
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def eat(token_type)
       if current_token.type == token_type
@@ -81,6 +89,14 @@ module Ruslanspivak
 
     def digit?
       current_char.match?(/(?<digit>[0-9]{1})/)
+    end
+
+    def whitespace?
+      current_char.match?(/(?<whitespace>\s{1})/)
+    end
+
+    def skip_whitespace
+      advance while current_char != Token.new(Token::EOF, nil) && whitespace?
     end
 
     def advance
