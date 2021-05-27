@@ -9,6 +9,7 @@ module Ruslanspivak
       @current_char = text[position]
     end
 
+    # Lexer
     # lexical analyzer, or lexer
     # rubocop:disable Metrics/MethodLength
     def next_token
@@ -44,6 +45,7 @@ module Ruslanspivak
       end
     end
 
+    # Parser
     # parsing and interpreting
     # syntax analysis
     # syntax analyzer.
