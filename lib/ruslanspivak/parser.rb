@@ -13,10 +13,19 @@ module Ruslanspivak
 
     private
 
-    def factor
+    # """factor : INTEGER | LPAREN expr RPAREN"""
+    def factor # rubocop:disable Metrics/MethodLength
       token = current_token
-      eat(Token::INTEGER)
-      token.value
+      case token.type
+      when Token::INTEGER
+        eat(Token::INTEGER)
+        token.value
+      when Token::LPAREN
+        eat(Token::LPAREN)
+        result = expression
+        eat(Token::RPAREN)
+        result
+      end
     end
 
     # """term : factor ((MUL | DIV) factor)*"""

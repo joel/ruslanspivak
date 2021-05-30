@@ -7,6 +7,8 @@ module Ruslanspivak
     MINUS   = "MINUS"
     DIV     = "DIV"
     MUL     = "MUL"
+    LPAREN  = "LPAREN"
+    RPAREN  = "RPAREN"
     EOF     = "EOF"
 
     attr_reader :type, :value

@@ -2,8 +2,8 @@
 
 module Ruslanspivak
   RSpec.describe Parser do
-    let(:input)  { "14 + 2 * 3 - 6 / 2" }
-    let(:result) { 17 }
+    let(:input)  { "7 + 3 * (10 / (12 / (3 + 1) - 1)) / (2 + 3) - 5 - 3 + (8)" }
+    let(:result) { 10 }
     let(:lexer)  { Lexer.new(input) }
 
     subject do

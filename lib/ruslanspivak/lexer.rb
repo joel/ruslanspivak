@@ -40,6 +40,16 @@ module Ruslanspivak
           return Token.new(Token::MINUS, "-")
         end
 
+        if current_char == "("
+          advance
+          return Token.new(Token::LPAREN, "(")
+        end
+
+        if current_char == ")"
+          advance
+          return Token.new(Token::RPAREN, ")")
+        end
+
         error
       end
 
