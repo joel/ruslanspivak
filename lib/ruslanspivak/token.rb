@@ -5,6 +5,8 @@ module Ruslanspivak
     INTEGER = "INTEGER"
     PLUS    = "PLUS"
     MINUS   = "MINUS"
+    DIV     = "MINUS"
+    MUL     = "MUL"
     EOF     = "EOF"
 
     attr_reader :type, :value
