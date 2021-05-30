@@ -7,7 +7,7 @@ module Ruslanspivak
     end
 
     context "with expression" do
-      let(:input) { "30 * 7 / 2" }
+      let(:input) { "30 * 7 / 2 + 3 - 4" }
 
       describe "#next_token" do
         it do
@@ -18,6 +18,11 @@ module Ruslanspivak
           expect(lexer.next_token).to eql(Token.new(Token::INTEGER, 7))
           expect(lexer.next_token).to eql(Token.new(Token::DIV, "/"))
           expect(lexer.next_token).to eql(Token.new(Token::INTEGER, 2))
+
+          expect(lexer.next_token).to eql(Token.new(Token::PLUS, "+"))
+          expect(lexer.next_token).to eql(Token.new(Token::INTEGER, 3))
+          expect(lexer.next_token).to eql(Token.new(Token::MINUS, "-"))
+          expect(lexer.next_token).to eql(Token.new(Token::INTEGER, 4))
         end
       end
     end

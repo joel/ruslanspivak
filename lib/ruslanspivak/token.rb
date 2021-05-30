@@ -5,7 +5,7 @@ module Ruslanspivak
     INTEGER = "INTEGER"
     PLUS    = "PLUS"
     MINUS   = "MINUS"
-    DIV     = "MINUS"
+    DIV     = "DIV"
     MUL     = "MUL"
     EOF     = "EOF"
 

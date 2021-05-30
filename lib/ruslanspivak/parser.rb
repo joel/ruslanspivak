@@ -13,34 +13,69 @@ module Ruslanspivak
 
     private
 
-    # Arithmetic expression parser.
+    def factor
+      token = current_token
+      eat(Token::INTEGER)
+      token.value
+    end
 
-    # Grammar:
-    # expr   : factor ((MUL | DIV) factor)*
-    # factor : INTEGER
-    def expression # rubocop:disable Metrics/MethodLength
-      result = current_token.value
+    # """term : factor ((MUL | DIV) factor)*"""
+    def term # rubocop:disable Metrics/MethodLength
+      result = factor
 
-      factor
-
-      while operator?
+      while [Token::MUL, Token::DIV].include?(current_token.type)
         case current_token.type
         when Token::MUL
           eat(Token::MUL)
-          result *= current_token.value
-          factor
+
+          right = op(result, "*", factor)
+          result *= right
+
         when Token::DIV
           eat(Token::DIV)
-          result /= current_token.value
-          factor
+
+          right = op(result, "/", factor)
+          result /= right
+
         end
       end
 
       result
     end
 
-    def operator?
-      [Token::MUL, Token::DIV].include?(current_token.type)
+    # Arithmetic expression parser / interpreter.
+
+    # calc>  14 + 2 * 3 - 6 / 2
+    # 17
+
+    # expr   : term ((PLUS | MINUS) term)*
+    # term   : factor ((MUL | DIV) factor)*
+    # factor : INTEGER
+    def expression # rubocop:disable Metrics/MethodLength
+      result = term
+
+      while [Token::PLUS, Token::MINUS].include?(current_token.type)
+        case current_token.type
+        when Token::PLUS
+          eat(Token::PLUS)
+
+          right = op(result, "+", term)
+          result += right
+
+        when Token::MINUS
+          eat(Token::MINUS)
+
+          right = op(result, "-", term)
+          result -= right
+
+        end
+      end
+      result
+    end
+
+    def op(result, operand, next_value)
+      puts(" ====> #{result} #{operand} #{next_value} ")
+      next_value
     end
 
     def error
@@ -53,10 +88,6 @@ module Ruslanspivak
       else
         error
       end
-    end
-
-    def factor
-      eat(Token::INTEGER)
     end
 
     attr_reader :lexer, :current_token
