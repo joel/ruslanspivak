@@ -17,6 +17,12 @@ module Ruslanspivak
     def factor # rubocop:disable Metrics/MethodLength
       token = current_token
       case token.type
+      when Token::PLUS
+        eat(Token::PLUS)
+        UnaryOp.new(token, factor)
+      when Token::MINUS
+        eat(Token::MINUS)
+        UnaryOp.new(token, factor)
       when Token::INTEGER
         eat(Token::INTEGER)
         Num.new(token)

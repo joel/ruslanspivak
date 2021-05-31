@@ -30,6 +30,15 @@ module Ruslanspivak
       node.value
     end
 
+    def visit_unary_op(node)
+      case node.operator.type
+      when Token::PLUS
+        +visit(node.expr)
+      when Token::MINUS
+        -visit(node.expr)
+      end
+    end
+
     private
 
     attr_reader :parser
