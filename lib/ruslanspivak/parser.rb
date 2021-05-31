@@ -19,37 +19,33 @@ module Ruslanspivak
       case token.type
       when Token::INTEGER
         eat(Token::INTEGER)
-        token.value
+        Num.new(token)
       when Token::LPAREN
         eat(Token::LPAREN)
-        result = expression
+        node = expression
         eat(Token::RPAREN)
-        result
+        node
       end
     end
 
     # """term : factor ((MUL | DIV) factor)*"""
     def term # rubocop:disable Metrics/MethodLength
-      result = factor
+      node = factor
 
       while [Token::MUL, Token::DIV].include?(current_token.type)
+        token = current_token
+
         case current_token.type
         when Token::MUL
           eat(Token::MUL)
-
-          right = op(result, "*", factor)
-          result *= right
-
         when Token::DIV
           eat(Token::DIV)
-
-          right = op(result, "/", factor)
-          result /= right
-
         end
+
+        node = BinOp.new(node, token, factor)
       end
 
-      result
+      node
     end
 
     # Arithmetic expression parser / interpreter.
@@ -61,30 +57,22 @@ module Ruslanspivak
     # term   : factor ((MUL | DIV) factor)*
     # factor : INTEGER
     def expression # rubocop:disable Metrics/MethodLength
-      result = term
+      node = term
 
       while [Token::PLUS, Token::MINUS].include?(current_token.type)
+        token = current_token
+
         case current_token.type
         when Token::PLUS
           eat(Token::PLUS)
-
-          right = op(result, "+", term)
-          result += right
-
         when Token::MINUS
           eat(Token::MINUS)
-
-          right = op(result, "-", term)
-          result -= right
-
         end
-      end
-      result
-    end
 
-    def op(result, operand, next_value)
-      puts(" ====> #{result} #{operand} #{next_value} ")
-      next_value
+        node = BinOp.new(node, token, term)
+      end
+
+      node
     end
 
     def error
