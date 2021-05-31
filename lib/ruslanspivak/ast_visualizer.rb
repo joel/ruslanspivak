@@ -34,8 +34,9 @@ module Ruslanspivak
       visit(node.left)
       visit(node.right)
 
-      [node.left, node.right].each do |_child_node|
-        s = "  node#{node.num} -> node#{node.num}\n"
+      [node.left, node.right].each do |child_node|
+        # puts("[#{node}][#{node.num}] => [#{child_node}][#{child_node.num}]")
+        s = "  node#{node.num} -> node#{child_node.num}\n"
         @dot_body << s
       end
     end
