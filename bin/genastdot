@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "ruslanspivak"
+require "tempfile"
+
+input = ARGV[0]
+
+puts "expression: [#{input}]"
+
+lexer  = Ruslanspivak::Lexer.new(input)
+parser = Ruslanspivak::Parser.new(lexer)
+viz    = Ruslanspivak::AstVisualizer.new(parser)
+
+content = viz.gendot
+puts content
+
+file = Tempfile.new(["ast", ".dot"])
+file.write(content)
+file.rewind
+
+puts file.read
+
+file.rewind
+
+file_name = "ast-{Time.new.to_i}.png"
+
+system(
+  "dot -Tpng -o tmp/#{file_name} #{file.path}"
+)
+
+system(
+  "open tmp/#{file_name}"
+)

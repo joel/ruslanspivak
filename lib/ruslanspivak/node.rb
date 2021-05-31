@@ -2,6 +2,8 @@
 
 module Ruslanspivak
   class Node
+    attr_accessor :num
+
     def type
       raise NotImplementedError
     end
