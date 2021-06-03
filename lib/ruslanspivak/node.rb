@@ -7,5 +7,9 @@ module Ruslanspivak
     def type
       raise NotImplementedError
     end
+
+    def name
+      self.class.name
+    end
   end
 end
